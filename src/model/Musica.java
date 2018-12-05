@@ -74,6 +74,31 @@ public class Musica {
     public String toString() {
         return "Musica{" + "codigo=" + codigo + ", titulo=" + titulo + ", duracao=" + duracao + ", compositores=" + compositores + ", interpretes=" + interpretes + '}';
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + this.codigo;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Musica other = (Musica) obj;
+        if (this.codigo != other.codigo) {
+            return false;
+        }
+        return true;
+    }
     
     
     

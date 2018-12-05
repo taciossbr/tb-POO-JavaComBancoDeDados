@@ -27,9 +27,12 @@ public class PessoaDAOSQLite implements PessoaDAO{
  
         try {
             Connection conn = this.conn;
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+            PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, pessoa.getNome());
             pstmt.executeUpdate();
+            ResultSet rs = pstmt.getGeneratedKeys();
+            rs.next();
+            pessoa.setCodigo(rs.getInt(1));
             
         } catch (SQLException e) {
             System.err.println(e.getMessage());

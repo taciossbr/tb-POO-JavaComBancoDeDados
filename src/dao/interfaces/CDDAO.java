@@ -14,5 +14,5 @@ public interface CDDAO {
     public void deletarCD(int codigoCD);
     public CD getCD(int codigoCD);
     public ArrayList<CD> todosCDs();
-    
+    public void destroy();
 }

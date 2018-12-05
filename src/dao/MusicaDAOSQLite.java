@@ -43,7 +43,7 @@ public class MusicaDAOSQLite implements MusicaDAO{
             e.printStackTrace();
             return;
         }
-        PessoaDAO dao = new PessoaDAOSQLite(SQLiteConnectionFactory.getConnection());
+        PessoaDAO dao = new PessoaDAOSQLite(this.conn);
         for (Pessoa comp: musica.getCompositores()) {
             if (comp.getCodigo() == 0) {
                 dao.cadastrarPessoa(comp);
@@ -65,7 +65,7 @@ public class MusicaDAOSQLite implements MusicaDAO{
                      "SET titulo_musica = ?, duracao = ? " +
                      "WHERE codigo_musica = ?";
         
-        PessoaDAO dao = new PessoaDAOSQLite(SQLiteConnectionFactory.getConnection());
+        PessoaDAO dao = new PessoaDAOSQLite(this.conn);
         try {
             Connection conn = this.conn;
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -78,14 +78,16 @@ public class MusicaDAOSQLite implements MusicaDAO{
             for (Pessoa comp: musica.getCompositores()) {
                 if (comp.getCodigo() == 0) {
                     dao.cadastrarPessoa(comp);
-                } else if (!old_comps.contains(comp)) {
+                }
+                if (!old_comps.contains(comp)) {
                     this.vinculaCompositor(musica, comp);
                 }
             }
             for (Pessoa interprete: musica.getInterpretes()) {
                 if (interprete.getCodigo() == 0){
                     dao.cadastrarPessoa(interprete);
-                } else if (!old_ints.contains(interprete)) {
+                }
+                if (!old_ints.contains(interprete)) {
                     this.vinculaInterprete(musica, interprete);
                 }
             }
@@ -177,7 +179,8 @@ public class MusicaDAOSQLite implements MusicaDAO{
         }
     }
 
-    private ArrayList<Pessoa> getCompositores(int codigoMusica) {
+    @Override
+    public ArrayList<Pessoa> getCompositores(int codigoMusica) {
         String sql = "SELECT * FROM Pessoa_Compoe_Musica " +
                      "WHERE codigo_musica = ?";
  
@@ -202,7 +205,8 @@ public class MusicaDAOSQLite implements MusicaDAO{
 
     }
 
-    private ArrayList<Pessoa> getInterpretes(int codigoMusica) {
+    @Override
+    public ArrayList<Pessoa> getInterpretes(int codigoMusica) {
         String sql = "SELECT * FROM Pessoa_Interpreta_Musica " +
                      "WHERE codigo_musica = ?";
  
@@ -254,6 +258,15 @@ public class MusicaDAOSQLite implements MusicaDAO{
             
         } catch (SQLException e) {
             System.err.println(e.getMessage());
+        }
+    }
+    
+    @Override
+    public void destroy() {
+        try {
+            this.conn.close();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
         }
     }
     

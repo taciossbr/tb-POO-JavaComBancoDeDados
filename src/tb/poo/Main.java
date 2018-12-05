@@ -1,11 +1,15 @@
 package tb.poo;
 
+import dao.CDDAOSQLite;
 import dao.MusicaDAOSQLite;
 import dao.PessoaDAOSQLite;
 import dao.SQLiteConnectionFactory;
+import dao.interfaces.CDDAO;
 import dao.interfaces.MusicaDAO;
 import dao.interfaces.PessoaDAO;
 import java.util.ArrayList;
+import model.CD;
+import model.CDInternacional;
 import model.Musica;
 import model.Pessoa;
 
@@ -18,6 +22,8 @@ public class Main {
     public static void main(String[] args) {
         
         PessoaDAO pdao = new PessoaDAOSQLite(SQLiteConnectionFactory.getConnection());
+        MusicaDAO mdao = new MusicaDAOSQLite(SQLiteConnectionFactory.getConnection());
+        CDDAO cdao = new CDDAOSQLite(SQLiteConnectionFactory.getConnection());
         /*
         Pessoa pessoa = new Pessoa("Luiz");
         pdao.cadastrarPessoa(pessoa);
@@ -34,7 +40,6 @@ public class Main {
         //*/
         
         /*
-        MusicaDAO dao = new MusicaDAOSQLite(SQLiteConnectionFactory.getConnection());
         
         ArrayList<Pessoa> comps = new ArrayList<>();
         comps.add(pdao.getPessoa(1));
@@ -63,7 +68,36 @@ public class Main {
         } 
         //*/
         
+        //*/
+        ArrayList<Musica> musicas = new ArrayList<>();
         
+        // CD cd = new CD("Black", musicas);
+        // cdao.cadastrarCD(cd);
+        // System.out.println("new: " + cd);
+        
+        // CD cd = new CDInternacional("Smart", "burro", 8, musicas);
+        // cdao.cadastrarCD(cd);
+        // System.out.println("new: " + cd);
+        
+        // musicas.add(mdao.getMusica(2));
+        // mdao.destroy();
+        // Musica musica = mdao.getMusica(5);
+        // mdao.destroy();
+        // CD cd = cdao.getCD(9);
+        // cd.addMusica(musica);
+        // System.out.println(cd.getMusicas());
+        
+        // cdao.alterarCD(cd);
+        
+        cdao.deletarCD(7);
+        
+        /*/
+        for( CD c: cdao.todosCDs()) {
+            System.out.println(c);
+            System.out.println(c.getMusicas());
+        } 
+        
+        //*/
         
         
     }
