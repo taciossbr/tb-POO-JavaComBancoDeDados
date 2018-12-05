@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Pessoa;
 
 /**
@@ -102,6 +104,15 @@ public class PessoaDAOSQLite implements PessoaDAO{
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             return null;
+        }
+    }
+    
+    @Override
+    public void destroy() {
+        try {
+            this.conn.close();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
         }
     }
 }

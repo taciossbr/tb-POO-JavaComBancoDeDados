@@ -13,4 +13,5 @@ public interface PessoaDAO {
     public void deletarPessoa(int codigoPessoa);
     public Pessoa getPessoa(int codigoPessoa);
     public ArrayList<Pessoa> todasPessoas();
+    public void destroy();
 }

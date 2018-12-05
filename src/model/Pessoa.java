@@ -37,6 +37,30 @@ public class Pessoa {
     public String toString() {
         return "Pessoa{" + "codigo=" + codigo + ", nome=" + nome + '}';
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 13 * hash + this.codigo;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        final Pessoa other = (Pessoa) obj;
+        if (this.codigo != other.codigo) {
+            return false;
+        }
+        return true;
+    }
+    
+    
     
     
     

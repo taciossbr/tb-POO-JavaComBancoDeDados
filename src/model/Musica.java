@@ -69,5 +69,12 @@ public class Musica {
     public void addInterprete(Pessoa interprete) {
         this.interpretes.add(interprete);
     }
+
+    @Override
+    public String toString() {
+        return "Musica{" + "codigo=" + codigo + ", titulo=" + titulo + ", duracao=" + duracao + ", compositores=" + compositores + ", interpretes=" + interpretes + '}';
+    }
+    
+    
     
 }

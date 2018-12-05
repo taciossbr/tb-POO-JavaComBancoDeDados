@@ -26,17 +26,37 @@ public class MusicaDAOSQLite implements MusicaDAO{
     }
 
     @Override
-    public void cadastrarMusica(Musica musica) {
+    public void cadastrarMusica(Musica musica){
         String sql = "INSERT INTO Musica(titulo_musica, duracao) VALUES (?, ?);";
- 
-        try (Connection conn = this.conn;
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        try {
+            Connection conn = this.conn;
+            PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, musica.getTitulo());
             pstmt.setInt(2, musica.getDuracao());
             pstmt.executeUpdate();
+            ResultSet rs = pstmt.getGeneratedKeys();
+            rs.next();
+            musica.setCodigo(rs.getInt(1));
         } catch (SQLException e) {
             System.err.println(e.getMessage());
+            e.printStackTrace();
+            return;
         }
+        PessoaDAO dao = new PessoaDAOSQLite(SQLiteConnectionFactory.getConnection());
+        for (Pessoa comp: musica.getCompositores()) {
+            if (comp.getCodigo() == 0) {
+                dao.cadastrarPessoa(comp);
+            }
+            this.vinculaCompositor(musica, comp);
+        }
+        for (Pessoa interprete: musica.getInterpretes()) {
+            if (interprete.getCodigo() == 0){
+                dao.cadastrarPessoa(interprete);
+            }
+            this.vinculaInterprete(musica, interprete);
+        }
+        dao.destroy();
     }
 
     @Override
@@ -44,16 +64,36 @@ public class MusicaDAOSQLite implements MusicaDAO{
         String sql = "UPDATE Musica " +
                      "SET titulo_musica = ?, duracao = ? " +
                      "WHERE codigo_musica = ?";
- 
-        try (Connection conn = this.conn;
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        PessoaDAO dao = new PessoaDAOSQLite(SQLiteConnectionFactory.getConnection());
+        try {
+            Connection conn = this.conn;
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, musica.getTitulo());
             pstmt.setInt(2, musica.getDuracao());
             pstmt.setInt(3, musica.getCodigo());
             pstmt.executeUpdate();
+            ArrayList<Pessoa> old_comps = this.getCompositores(musica.getCodigo());
+            ArrayList<Pessoa> old_ints = this.getInterpretes(musica.getCodigo());
+            for (Pessoa comp: musica.getCompositores()) {
+                if (comp.getCodigo() == 0) {
+                    dao.cadastrarPessoa(comp);
+                } else if (!old_comps.contains(comp)) {
+                    this.vinculaCompositor(musica, comp);
+                }
+            }
+            for (Pessoa interprete: musica.getInterpretes()) {
+                if (interprete.getCodigo() == 0){
+                    dao.cadastrarPessoa(interprete);
+                } else if (!old_ints.contains(interprete)) {
+                    this.vinculaInterprete(musica, interprete);
+                }
+            }
+            
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
+        dao.destroy();
     }
 
     @Override
@@ -61,8 +101,31 @@ public class MusicaDAOSQLite implements MusicaDAO{
         String sql = "DELETE FROM Musica " +
                      "WHERE codigo_musica = ?";
  
-        try (Connection conn = this.conn;
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            Connection conn = this.conn;
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, codigoMusica);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        sql = "DELETE FROM Pessoa_Compoe_Musica " +
+                     "WHERE codigo_musica = ?";
+ 
+        try {
+            Connection conn = this.conn;
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, codigoMusica);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        sql = "DELETE FROM Pessoa_Interpreta_Musica " +
+                     "WHERE codigo_musica = ?";
+ 
+        try {
+            Connection conn = this.conn;
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, codigoMusica);
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -75,8 +138,9 @@ public class MusicaDAOSQLite implements MusicaDAO{
         String sql = "SELECT * FROM Musica " +
                      "WHERE codigo_musica = ?";
  
-        try (Connection conn = this.conn;
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            Connection conn = this.conn;
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, codigoMusica);
             ResultSet rs = pstmt.executeQuery();
             rs.next();
@@ -94,8 +158,9 @@ public class MusicaDAOSQLite implements MusicaDAO{
     public ArrayList<Musica> todasMusicas() {
         String sql = "SELECT * FROM Musica";
  
-        try (Connection conn = this.conn;
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            Connection conn = this.conn;
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
             ArrayList<Musica> musicas = new ArrayList<>();
             while (rs.next()) {
@@ -116,16 +181,19 @@ public class MusicaDAOSQLite implements MusicaDAO{
         String sql = "SELECT * FROM Pessoa_Compoe_Musica " +
                      "WHERE codigo_musica = ?";
  
-        try (Connection conn = this.conn;
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            Connection conn = this.conn;
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, codigoMusica);
             ResultSet rs = pstmt.executeQuery();
             ArrayList<Pessoa> compositores = new ArrayList<>();
+            
+            PessoaDAO dao = new PessoaDAOSQLite(SQLiteConnectionFactory.getConnection());
             while (rs.next()) {
-                PessoaDAO dao = new PessoaDAOSQLite(SQLiteConnectionFactory.getConnection());
                 Pessoa pessoa = dao.getPessoa(rs.getInt("codigo_pessoa"));
                 compositores.add(pessoa);
             }
+            dao.destroy();
             return compositores;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -138,16 +206,19 @@ public class MusicaDAOSQLite implements MusicaDAO{
         String sql = "SELECT * FROM Pessoa_Interpreta_Musica " +
                      "WHERE codigo_musica = ?";
  
-        try (Connection conn = this.conn;
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            Connection conn = this.conn;
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, codigoMusica);
             ResultSet rs = pstmt.executeQuery();
             ArrayList<Pessoa> interpretes = new ArrayList<>();
+            
+            PessoaDAO dao = new PessoaDAOSQLite(SQLiteConnectionFactory.getConnection());
             while (rs.next()) {
-                PessoaDAO dao = new PessoaDAOSQLite(SQLiteConnectionFactory.getConnection());
                 Pessoa pessoa = dao.getPessoa(rs.getInt("codigo_pessoa"));
                 interpretes.add(pessoa);
             }
+            dao.destroy();
             return interpretes;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -155,4 +226,35 @@ public class MusicaDAOSQLite implements MusicaDAO{
         }
 
     }
+
+    private void vinculaCompositor(Musica musica, Pessoa comp) {
+        String sql = "INSERT INTO Pessoa_Compoe_Musica VALUES (?, ?);";
+ 
+        try {
+            Connection conn = this.conn;
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, comp.getCodigo());
+            pstmt.setInt(2, musica.getCodigo());
+            pstmt.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    private void vinculaInterprete(Musica musica, Pessoa interprete) {
+        String sql = "INSERT INTO Pessoa_Interpreta_Musica VALUES (?, ?);";
+ 
+        try {
+            Connection conn = this.conn;
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, interprete.getCodigo());
+            pstmt.setInt(2, musica.getCodigo());
+            pstmt.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    
 }
