@@ -13,11 +13,6 @@ public class Musica {
     private ArrayList<Pessoa> compositores;
     private ArrayList<Pessoa> interpretes;
 
-    public Musica() {
-        this.compositores = new ArrayList<Pessoa>();
-        this.interpretes = new ArrayList<Pessoa>();
-    }
-
     public Musica(String titulo, int duracao, ArrayList<Pessoa> compositores, ArrayList<Pessoa> interpretes) {
         this.titulo = titulo;
         this.duracao = duracao;

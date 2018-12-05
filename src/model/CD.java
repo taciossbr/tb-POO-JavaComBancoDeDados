@@ -8,6 +8,15 @@ public class CD {
     private int codigo;
     private String titulo;
 
+    public CD(String titulo) {
+        this.titulo = titulo;
+    }
+    
+    public CD(int codigo, String titulo) {
+        this.codigo = codigo;
+        this.titulo = titulo;
+    } 
+    
     public int getCodigo() {
         return codigo;
     }
