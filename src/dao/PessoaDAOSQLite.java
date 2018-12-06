@@ -85,7 +85,7 @@ public class PessoaDAOSQLite implements PessoaDAO{
             Pessoa pessoa = new Pessoa(rs.getInt("codigo_pessoa"), rs.getString("nome_pessoa"));
             return pessoa;
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            // System.err.println(e.getMessage());
             return null;
         }
     }

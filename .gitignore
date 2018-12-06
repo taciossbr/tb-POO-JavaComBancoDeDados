@@ -29,6 +29,5 @@ hs_err_pid*
 build/
 
 # frescura netbeans
-
 nbproject
-/dist/
+
