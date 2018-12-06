@@ -26,4 +26,9 @@ hs_err_pid*
 # SQLite
 *.db
 *.sqlite3
-/build/
+build/
+
+# frescura netbeans
+
+nbproject
+/dist/
