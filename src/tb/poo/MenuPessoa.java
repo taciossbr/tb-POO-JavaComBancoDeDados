@@ -18,11 +18,11 @@ import model.Pessoa;
 class MenuPessoa {
 
     static void init() {
-        Printer.cprintln("--------------------------------------", "31");
+        Printer.cprintln("\n--------------------------------------", "31");
         Printer.cprint("--------", "31");
         Printer.cprint("   Cadastrar Pessoa   ", "32");
         Printer.cprintln("--------", "31");
-        Printer.cprintln("--------------------------------------", "31");
+        Printer.cprintln("--------------------------------------\n", "31");
         
         
         int op = 0;

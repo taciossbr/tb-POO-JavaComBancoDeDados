@@ -28,11 +28,11 @@ class MenuCD {
     
     
     static void init() {
-        Printer.cprintln("--------------------------------------", "31");
+        Printer.cprintln("\n--------------------------------------", "31");
         Printer.cprint("----------", "31");
         Printer.cprint("   Cadastrar CD   ", "32");
         Printer.cprintln("----------", "31");
-        Printer.cprintln("--------------------------------------", "31");
+        Printer.cprintln("--------------------------------------\n", "31");
         
         
         int op = 0;

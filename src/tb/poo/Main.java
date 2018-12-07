@@ -1,3 +1,9 @@
+/**
+ * TB - POO 2o Semestre 2018
+ * @author Tacio dos Santos Souza
+ * @author Adenilson Elias da Silva
+ */
+
 package tb.poo;
 
 import static java.lang.System.out;
@@ -16,10 +22,6 @@ import model.CDInternacional;
 import model.Musica;
 import model.Pessoa;
 
-/**
- *
- * @author tacioss
- */
 public class Main {
 
     public static void main(String[] args) {
@@ -27,7 +29,7 @@ public class Main {
         Printer.cprint("--------------", "31");
         Printer.cprint("   MENU   ", "32");
         Printer.cprintln("--------------", "31");
-        Printer.cprintln("--------------------------------------", "31");
+        Printer.cprintln("--------------------------------------\n", "31");
         
         
         int op = 0;

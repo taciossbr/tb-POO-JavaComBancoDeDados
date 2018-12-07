@@ -24,11 +24,11 @@ import static tb.poo.MenuPessoa.imprimirTabela;
 class MenuMusica {
 
     static void init() {
-        Printer.cprintln("--------------------------------------", "31");
+        Printer.cprintln("\n--------------------------------------", "31");
         Printer.cprint("--------", "31");
         Printer.cprint("   Cadastrar Musica   ", "32");
         Printer.cprintln("--------", "31");
-        Printer.cprintln("--------------------------------------", "31");
+        Printer.cprintln("--------------------------------------\n", "31");
         
         
         int op = 0;
