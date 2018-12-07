@@ -1,7 +1,7 @@
 # TB POO - JavaComBancoDeDados
 
-Tacio dos Santos Souza
-Adenilson Elias da Silva
+- Tacio dos Santos Souza
+- Adenilson Elias da Silva
 
 ## Intruções
 
