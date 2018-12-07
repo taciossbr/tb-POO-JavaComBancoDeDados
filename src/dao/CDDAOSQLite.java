@@ -51,7 +51,6 @@ public class CDDAOSQLite implements CDDAO{
         }
         MusicaDAO dao = new MusicaDAOSQLite(this.conn);
         for (Musica m: cd.getMusicas()) {
-            System.out.println(m);
             if (m.getCodigo() == 0) {
                 dao.cadastrarMusica(m);
             }

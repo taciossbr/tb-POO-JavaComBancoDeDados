@@ -164,7 +164,7 @@ class MenuMusica {
         imprimirTabelaTodasMusicas();
     }
 
-    private static void imprimirTabelaTodasMusicas() {
+    public static void imprimirTabelaTodasMusicas() {
         MusicaDAO dao = new MusicaDAOSQLite(SQLiteConnectionFactory.getConnection());
         ArrayList<Musica> musicas = dao.todasMusicas();
         
@@ -175,7 +175,7 @@ class MenuMusica {
         dao.destroy();
     }
 
-    private static void imprimirTabela(ArrayList<Musica> musicas) {
+    public static void imprimirTabela(ArrayList<Musica> musicas) {
         Printer.linha(80, "31");
         out.println();
         for (Musica m: musicas) {

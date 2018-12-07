@@ -10,8 +10,10 @@ import dao.PessoaDAOSQLite;
 import dao.SQLiteConnectionFactory;
 import dao.interfaces.MusicaDAO;
 import dao.interfaces.PessoaDAO;
+import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import model.Musica;
+import model.Pessoa;
 
 /**
  *
@@ -20,6 +22,7 @@ import model.Musica;
 public class CadastrarMusica extends javax.swing.JFrame {
     private MusicaDAO daoMusica;
     private PessoaDAO daoPessoa;
+    private final ArrayList<Pessoa> pessoas;
     /**
      * Creates new form CadastrarMusica
      */
@@ -27,6 +30,12 @@ public class CadastrarMusica extends javax.swing.JFrame {
         this.daoMusica = new MusicaDAOSQLite(SQLiteConnectionFactory.getConnection());
         this.daoPessoa = new PessoaDAOSQLite(SQLiteConnectionFactory.getConnection());
         initComponents();
+        ArrayList<String> nomes = new ArrayList<>();
+        this.pessoas = daoPessoa.todasPessoas();
+        for(Pessoa p : this.pessoas) {
+            nomes.add(p.getNome());
+        }
+        Compositores.setModel(new DefaultComboBoxModel(nomes.toArray()));
     }
 
     /**
@@ -149,7 +158,7 @@ public class CadastrarMusica extends javax.swing.JFrame {
     }//GEN-LAST:event_ConcluirActionPerformed
 
     private void CompositoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CompositoresActionPerformed
-        Compositores.setModel(new DefaultComboBoxModel(daoPessoa.todasPessoas().toArray()));
+        
     }//GEN-LAST:event_CompositoresActionPerformed
 
     /**

@@ -151,7 +151,7 @@ public class MusicaDAOSQLite implements MusicaDAO{
                 this.getCompositores(codigoMusica), this.getInterpretes(codigoMusica));
             return musica;
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            // System.err.println(e.getMessage());
             return null;
         }
     }
