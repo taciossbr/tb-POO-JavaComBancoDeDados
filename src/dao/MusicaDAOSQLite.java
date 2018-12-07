@@ -220,7 +220,9 @@ public class MusicaDAOSQLite implements MusicaDAO{
             PessoaDAO dao = new PessoaDAOSQLite(SQLiteConnectionFactory.getConnection());
             while (rs.next()) {
                 Pessoa pessoa = dao.getPessoa(rs.getInt("codigo_pessoa"));
-                interpretes.add(pessoa);
+                if (pessoa != null) {
+                    interpretes.add(pessoa);
+                }
             }
             dao.destroy();
             return interpretes;

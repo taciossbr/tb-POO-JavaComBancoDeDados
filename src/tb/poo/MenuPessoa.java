@@ -78,6 +78,7 @@ class MenuPessoa {
         out.println("COD: " + pessoa.getCodigo());
         out.println();
         out.println();
+        dao.destroy();
         
     }
 
@@ -96,6 +97,7 @@ class MenuPessoa {
         
         out.println();
         out.println();
+        dao.destroy();
     }
     
     private static void alterarPessoa() {
@@ -104,7 +106,6 @@ class MenuPessoa {
         out.print("\n\n\nCOD: ");
         int cod = sc.nextInt();
         Pessoa pessoa = dao.getPessoa(cod);
-        out.println(pessoa);
         if (pessoa == null) {
             out.println("Pessoa não cadastrada\n\n:-(");
         } else {
@@ -112,7 +113,6 @@ class MenuPessoa {
             // sc.next();
             String nome = sc.next();
             pessoa.setNome(nome);
-            out.println(pessoa);
             dao.alterarPessoa(pessoa);
         }
         
@@ -121,30 +121,11 @@ class MenuPessoa {
         out.println("COD: " + pessoa.getCodigo());
         out.println();
         out.println();
+        dao.destroy();
     }
 
     private static void consultarTodasPessoas() {
-        PessoaDAO dao = new PessoaDAOSQLite(SQLiteConnectionFactory.getConnection());
-        ArrayList<Pessoa> pessoas = dao.todasPessoas();
-        Printer.linha(80, "31");
-        out.println();
-        for (Pessoa p: pessoas) {
-            int cod = p.getCodigo();
-            String nome = p.getNome();
-            Printer.cprint("| ", "31");
-            Printer.spaces(5 - Integer.toString(cod).length());
-            Printer.cprint(p.getCodigo(), "32");
-            Printer.cprint(" | ", "31");
-            Printer.cprint(nome, "32");
-            Printer.spaces(68 - nome.length());
-            Printer.cprintln(" |", "31");
-            
-            Printer.linha(80, "31");
-            Printer.println("");
-        }
-        
-        out.println();
-        out.println();
+        imprimirTabelaTodasPessoas();
     }
     
     private static void deletarPessoa() {
@@ -168,6 +149,38 @@ class MenuPessoa {
         
         out.println();
         out.println();
+        dao.destroy();
     }
+
+    public static void imprimirTabelaTodasPessoas() {
+        PessoaDAO dao = new PessoaDAOSQLite(SQLiteConnectionFactory.getConnection());
+        ArrayList<Pessoa> pessoas = dao.todasPessoas();
+        
+        imprimirTabela(pessoas);
+        
+        out.println();
+        out.println();
+        dao.destroy();
+    }
+
+    public static void imprimirTabela(ArrayList<Pessoa> pessoas) {
+        Printer.linha(80, "31");
+        out.println();
+        for (Pessoa p: pessoas) {
+            int cod = p.getCodigo();
+            String nome = p.getNome();
+            Printer.cprint("| ", "31");
+            Printer.spaces(5 - Integer.toString(cod).length());
+            Printer.cprint(cod, "32");
+            Printer.cprint(" | ", "31");
+            Printer.cprint(nome, "32");
+            Printer.spaces(68 - nome.length());
+            Printer.cprintln(" |", "31");
+            Printer.linha(80, "31");
+            Printer.println("");
+        }
+        out.println();
+    }
+    
     
 }

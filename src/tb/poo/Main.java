@@ -37,6 +37,9 @@ public class Main {
                 case 1:
                     menuPessoa();
                     break;
+                case 2:
+                    menuMusica();
+                    break;
                 case 0: // Sair
             }
         } while (op != 0);
@@ -48,9 +51,10 @@ public class Main {
     private static int menu() {
         
         out.println("1- Pessoas");
-        out.println("\n0- SAIR");
+        out.println("2- Musicas");
+        out.println("\n0- SAIR\n\n");
         
-        
+        out.print("Op: ");
         int op = 0;
         Scanner sc = new Scanner(System.in);
         op = sc.nextInt();
@@ -59,6 +63,10 @@ public class Main {
 
     private static void menuPessoa() {
         MenuPessoa.init();
+    }
+
+    private static void menuMusica() {
+        MenuMusica.init();
     }
 
     
